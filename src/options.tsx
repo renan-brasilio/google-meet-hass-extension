@@ -19,8 +19,49 @@ import {
     Snackbar,
     Stack,
     TextField,
+    ThemeProvider,
+    createTheme,
 } from "@mui/material";
 import { testConnection, TestResult } from "./hass";
+
+// Create a theme with proper font settings
+const theme = createTheme({
+    typography: {
+        fontFamily: '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiInputLabel-root': {
+                        fontSize: '14px',
+                    },
+                    '& .MuiInputBase-input': {
+                        fontSize: '14px',
+                    },
+                    '& .MuiFormHelperText-root': {
+                        fontSize: '12px',
+                    },
+                },
+            },
+        },
+        MuiFormLabel: {
+            styleOverrides: {
+                root: {
+                    fontSize: '14px',
+                    fontWeight: 500,
+                },
+            },
+        },
+        MuiFormControlLabel: {
+            styleOverrides: {
+                label: {
+                    fontSize: '14px',
+                },
+            },
+        },
+    },
+});
 
 enum TestStatus {
     NotTested,
@@ -30,6 +71,7 @@ enum TestStatus {
 
 const Options = () => {
     const [config, setConfig] = useState<Config>(defaultConfig);
+    const [originalConfig, setOriginalConfig] = useState<Config>(defaultConfig);
     const [saved, setSaved] = useState<boolean>(false);
     const [testStatus, setTestStatus] = useState<TestStatus>(
         TestStatus.NotTested
@@ -42,7 +84,10 @@ const Options = () => {
 
     // Populate the previous configuration on load
     useEffect(() => {
-        loadConfig().then(setConfig);
+        loadConfig().then((loadedConfig) => {
+            setConfig(loadedConfig);
+            setOriginalConfig(loadedConfig);
+        });
     }, []);
 
     const test = async () => {
@@ -56,6 +101,7 @@ const Options = () => {
 
     const save = async () => {
         await saveConfig(config);
+        setOriginalConfig(config);
 
         setSaved(true);
 
@@ -65,20 +111,47 @@ const Options = () => {
         return () => clearTimeout(timeout);
     };
 
+    // Check if configuration has changed
+    const hasConfigChanged = () => {
+        return JSON.stringify(config) !== JSON.stringify(originalConfig);
+    };
+
+    // Check if there's a URL to test
+    const hasUrlToTest = () => {
+        if (config.method === "api") {
+            return config.host && config.host.trim() !== "" &&
+                   config.token && config.token.trim() !== "" &&
+                   config.entity_id && config.entity_id.trim() !== "";
+        } else if (config.method === "webhook") {
+            return config.webhook_url && config.webhook_url.trim() !== "";
+        }
+        return false;
+    };
+
+    // Check if all required fields are filled
+    const areRequiredFieldsFilled = () => {
+        if (config.method === "api") {
+            return config.host && config.host.trim() !== "" &&
+                   config.token && config.token.trim() !== "" &&
+                   config.entity_id && config.entity_id.trim() !== "";
+        } else if (config.method === "webhook") {
+            return config.webhook_url && config.webhook_url.trim() !== "";
+        }
+        return false;
+    };
+
     return (
-        <>
-            <Stack spacing={2}>
-                <Stack direction="row" spacing={2}>
-                    <img src="icon48.png" alt="Logo" />
-                    <h1>Google Meet &lt;=&gt; Home Assistant Configuration</h1>
-                </Stack>
-                <Divider />
-                <Stack
-                    spacing={2}
-                    sx={{
-                        width: 400,
-                    }}
-                >
+        <ThemeProvider theme={theme}>
+            <Box
+                sx={{
+                    width: 450,
+                    maxHeight: 600,
+                    overflow: 'auto',
+                    padding: 2,
+                    boxSizing: 'border-box'
+                }}
+            >
+                <Stack spacing={2}>
                     <Box>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Update Method</FormLabel>
@@ -98,7 +171,7 @@ const Options = () => {
                             <TextField
                                 id="host"
                                 name="host"
-                                label="Home Assistant Base URL"
+                                label="Home Assistant Base URL *"
                                 value={config.host}
                                 onChange={(e) =>
                                     setConfig({ ...config, host: e.target.value })
@@ -106,6 +179,7 @@ const Options = () => {
                                 helperText="No trailing slashes; ex: http://homeassistant.local"
                                 variant="standard"
                                 fullWidth
+                                required
                             />
                         </Box>
                     )}
@@ -181,21 +255,39 @@ const Options = () => {
                             />
                         </Box>
                     )}
-                    <Stack direction="row" spacing={2}>
-                        <LoadingButton
-                            size="small"
-                            onClick={test}
-                            loading={testStatus === TestStatus.Testing}
-                            loadingIndicator="Loading..."
-                            variant="outlined"
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingTop: 1
+                    }}>
+                        {hasUrlToTest() && (
+                            <LoadingButton
+                                size="small"
+                                onClick={test}
+                                loading={testStatus === TestStatus.Testing}
+                                loadingIndicator="Loading..."
+                                variant="outlined"
+                            >
+                                Test
+                            </LoadingButton>
+                        )}
+                        <Button
+                            variant="contained"
+                            onClick={save}
+                            disabled={!hasConfigChanged() || !areRequiredFieldsFilled()}
+                            sx={{
+                                backgroundColor: (hasConfigChanged() && areRequiredFieldsFilled()) ? undefined : '#ccc',
+                                color: (hasConfigChanged() && areRequiredFieldsFilled()) ? undefined : '#666',
+                                '&:hover': {
+                                    backgroundColor: (hasConfigChanged() && areRequiredFieldsFilled()) ? undefined : '#ccc',
+                                }
+                            }}
                         >
-                            Test
-                        </LoadingButton>
-                        <Button variant="contained" onClick={save}>
                             Save
                         </Button>
-                    </Stack>
-                    <Box sx={{ height: 50 }}>
+                    </Box>
+                    <Box sx={{ minHeight: 20, position: 'relative' }}>
                         <Snackbar
                             open={saved}
                             autoHideDuration={6000}
@@ -228,8 +320,8 @@ const Options = () => {
                         </Snackbar>
                     </Box>
                 </Stack>
-            </Stack>
-        </>
+            </Box>
+        </ThemeProvider>
     );
 };
 

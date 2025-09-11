@@ -1,4 +1,4 @@
-import { loadConfig } from "./config";
+import { loadConfig, validateConfig } from "./config";
 import { setEntityState } from "./hass";
 
 // Cache the previous state
@@ -24,8 +24,32 @@ async function updateMeetingStateIfNeeded() {
     });
 
     // Send the entity update to Home Assistant
-    const config = await loadConfig();
-    return await setEntityState(config, isInMeeting);
+    try {
+        const config = await loadConfig();
+
+        // Validate configuration before attempting to update
+        const validation = validateConfig(config);
+        if (!validation.isValid) {
+            // Only show configuration errors in console, don't spam the user
+            console.log("Extension not configured yet:", validation.errors[0]);
+            // Don't change badge for unconfigured state - let it show meeting status
+            return;
+        }
+
+        const success = await setEntityState(config, isInMeeting);
+
+        if (success === false) {
+            // Update badge to show error state
+            chrome.action.setBadgeText({ text: "err" });
+            chrome.action.setBadgeBackgroundColor({ color: "orange" });
+            console.warn("Failed to update Home Assistant entity. Check your configuration and network connection.");
+        }
+    } catch (error) {
+        console.error("Error in updateMeetingStateIfNeeded:", error);
+        // Update badge to show error state
+        chrome.action.setBadgeText({ text: "err" });
+        chrome.action.setBadgeBackgroundColor({ color: "orange" });
+    }
 }
 
 // Run once installed and continue listening for tab URL changes

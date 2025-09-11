@@ -1,4 +1,4 @@
-# Google Meet <=> Home Assistant Chrome Extension
+# Google Meet ↔ Home Assistant Chrome Extension
 
 ![](public/icon128.png)
 
