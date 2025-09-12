@@ -1,10 +1,53 @@
+/**
+ * Popup component for the Google Meet ↔ Home Assistant extension
+ *
+ * GOAL:
+ * This React component provides the main user interface that appears when users click
+ * the extension icon. It displays real-time information about the current meeting status
+ * and configuration state, giving users immediate feedback about the extension's operation.
+ *
+ * The popup shows:
+ * - Current meeting status (in meeting or not)
+ * - Configuration status (properly configured or not)
+ * - Selected integration method (API or Webhook)
+ * - Last update timestamp
+ * - Quick access to settings
+ *
+ * FEATURES:
+ * - Real-time meeting status monitoring (updates every 2 seconds)
+ * - Visual status indicators with icons and colors
+ * - Configuration validation display
+ * - One-click access to options page
+ * - Responsive design optimized for extension popup dimensions
+ *
+ * COMPONENTS:
+ * - Popup: Main component that orchestrates the popup interface
+ * - Theme configuration for consistent Material-UI styling
+ *
+ * METHODS:
+ * - checkMeetingStatus(): Queries Chrome tabs to detect Google Meet sessions
+ * - openOptionsPage(): Opens the extension options page
+ * - getConfigurationStatus(): Returns current configuration status with visual indicators
+ * - getMeetingStatus(): Returns current meeting status with visual indicators
+ *
+ * STATE MANAGEMENT:
+ * - config: Current extension configuration
+ * - isInMeeting: Boolean indicating if user is currently in a Google Meet
+ * - lastUpdate: Timestamp of last status check
+ *
+ * UI ELEMENTS:
+ * - Header with extension logo and settings button
+ * - Configuration status chip (success/error with method type)
+ * - Meeting status chip (in meeting/not in meeting)
+ * - Last update timestamp
+ */
+
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Config, defaultConfig, loadConfig, validateConfig } from "./config";
 import Settings from "@mui/icons-material/Settings";
 import CheckCircle from "@mui/icons-material/CheckCircle";
 import Error from "@mui/icons-material/Error";
-import Warning from "@mui/icons-material/Warning";
 import Videocam from "@mui/icons-material/Videocam";
 import VideocamOff from "@mui/icons-material/VideocamOff";
 import {
@@ -17,7 +60,9 @@ import {
     Chip,
 } from "@mui/material";
 
-// Create a theme with proper font settings
+/**
+ * Create a theme with proper font settings
+ */
 const theme = createTheme({
     typography: {
         fontFamily: '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
@@ -56,12 +101,17 @@ const theme = createTheme({
     },
 });
 
+/**
+ * Main popup component that displays extension status
+ */
 const Popup = () => {
     const [config, setConfig] = useState<Config>(defaultConfig);
     const [isInMeeting, setIsInMeeting] = useState<boolean>(false);
     const [lastUpdate, setLastUpdate] = useState<string>("");
 
-    // Check meeting status and update timestamp
+    /**
+     * Check meeting status and update timestamp
+     */
     const checkMeetingStatus = () => {
         chrome.tabs.query({
             url: "https://meet.google.com/*-*-*",
@@ -71,10 +121,11 @@ const Popup = () => {
         });
     };
 
-    // Populate the previous configuration on load and start monitoring
+    /**
+     * Populate the previous configuration on load and start monitoring
+     */
     useEffect(() => {
         loadConfig().then((loadedConfig) => {
-            console.log('Loaded config in popup:', loadedConfig);
             setConfig(loadedConfig);
         });
         checkMeetingStatus();
@@ -85,14 +136,19 @@ const Popup = () => {
         return () => clearInterval(interval);
     }, []);
 
+    /**
+     * Opens the options page for configuration
+     */
     const openOptionsPage = () => {
         chrome.runtime.openOptionsPage();
     };
 
+    /**
+     * Gets the current configuration status
+     * @returns Object containing status information
+     */
     const getConfigurationStatus = () => {
-        console.log('Checking config status for:', config);
         const validation = validateConfig(config);
-        console.log('Validation result:', validation);
 
         if (!validation.isValid) {
             return {
@@ -103,14 +159,19 @@ const Popup = () => {
             };
         }
 
+        const methodText = config.method === 'api' ? 'API' : 'Webhook';
         return {
             status: 'configured',
-            message: 'Properly configured',
+            message: `Properly configured (${methodText})`,
             icon: <CheckCircle color="success" />,
             color: 'success' as const
         };
     };
 
+    /**
+     * Gets the current meeting status
+     * @returns Object containing meeting status information
+     */
     const getMeetingStatus = () => {
         if (isInMeeting) {
             return {

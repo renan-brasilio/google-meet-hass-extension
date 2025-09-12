@@ -1,13 +1,50 @@
+/**
+ * Configuration types and utilities for the Google Meet ↔ Home Assistant extension
+ *
+ * GOAL:
+ * This module provides the core configuration management system for the extension.
+ * It handles storing, loading, validating, and managing all configuration settings
+ * that control how the extension communicates with Home Assistant.
+ *
+ * The configuration supports two integration methods:
+ * - API: Direct REST API calls to Home Assistant
+ * - Webhook: HTTP webhook calls to Home Assistant
+ *
+ * METHODS:
+ * - loadConfig(): Loads configuration from Chrome storage
+ * - saveConfig(): Saves configuration to Chrome storage
+ * - validateConfig(): Validates configuration completeness and format
+ *
+ * TYPES:
+ * - UpdateMethod: Union type for "api" | "webhook"
+ * - Config: Main configuration interface
+ * - defaultConfig: Default configuration values
+ */
+
+/**
+ * Available update methods for Home Assistant integration
+ */
 export type UpdateMethod = "api" | "webhook";
 
+/**
+ * Configuration interface for the extension
+ */
 export interface Config {
+    /** Home Assistant base URL (for API method) */
     host: string;
+    /** Authorization token (for API method) */
     token: string;
+    /** Entity ID to update in Home Assistant */
     entity_id: string;
+    /** Method to use for updating Home Assistant */
     method: UpdateMethod;
+    /** Webhook URL (for webhook method) */
     webhook_url: string;
 }
 
+/**
+ * Default configuration values
+ */
 export const defaultConfig: Config = {
     host: "",
     token: "",
@@ -16,14 +53,27 @@ export const defaultConfig: Config = {
     webhook_url: "",
 };
 
+/**
+ * Loads the configuration from Chrome storage
+ * @returns Promise that resolves to the loaded configuration
+ */
 export async function loadConfig(): Promise<Config> {
     return (await chrome.storage.sync.get(defaultConfig)) as Config;
 }
 
+/**
+ * Saves the configuration to Chrome storage
+ * @param config - Configuration object to save
+ */
 export async function saveConfig(config: Config) {
     await chrome.storage.sync.set(config);
 }
 
+/**
+ * Validates the configuration object
+ * @param config - Configuration object to validate
+ * @returns Object containing validation result and error messages
+ */
 export function validateConfig(config: Config): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
@@ -60,8 +110,4 @@ export function validateConfig(config: Config): { isValid: boolean; errors: stri
         isValid: errors.length === 0,
         errors
     };
-}
-
-export function isConfigured(config: Config): boolean {
-    return validateConfig(config).isValid;
 }
