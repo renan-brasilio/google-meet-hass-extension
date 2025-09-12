@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "Actualiza o estado de uma entidade do Home Assistant com o estado das suas chamadas do Google Meet"
+  },
+  "options": {
+    "title": "Opções do Google Meet ↔ Home Assistant",
+    "updateMethod": "Método de Actualização",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "URL Base do Home Assistant",
+    "hostUrlHelp": "Sem barras no final; ex: http://homeassistant.local",
+    "authToken": "Token de Autorização",
+    "entityId": "ID da Entidade",
+    "webhookUrl": "URL do Webhook",
+    "webhookUrlHelp": "URL completa do webhook incluindo ID da entidade; ex: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "Testar",
+    "save": "Guardar",
+    "configurationSaved": "Configuração guardada!",
+    "required": "Obrigatório",
+    "language": "Idioma"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "Estado da Configuração",
+    "meetingStatus": "Estado da Reunião",
+    "properlyConfigured": "Configurado correctamente",
+    "notConfigured": "Não configurado",
+    "inGoogleMeet": "No Google Meet",
+    "notInMeeting": "Não em reunião",
+    "lastUpdated": "Última actualização",
+    "openConfiguration": "Abrir configuração"
+  },
+  "test": {
+    "testing": "A testar...",
+    "apiValid": "Configuração da API é válida",
+    "webhookValid": "Configuração do webhook é válida",
+    "invalidToken": "Token de autenticação inválido",
+    "entityNotFound": "Entidade não encontrada ou URL base incorrecta",
+    "unexpectedError": "Erro inesperado",
+    "webhookFailed": "Teste do webhook falhou"
+  },
+  "errors": {
+    "hostRequired": "URL do host do Home Assistant é obrigatória",
+    "hostFormat": "URL do host do Home Assistant deve começar com http:// ou https://",
+    "entityRequired": "ID da entidade é obrigatório",
+    "tokenRequired": "Token da API é obrigatório para o método API",
+    "webhookRequired": "URL do webhook é obrigatória para o método webhook",
+    "configureFirst": "Por favor, configure a extensão primeiro"
+  }
+}

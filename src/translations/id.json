@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "Memperbarui status entitas Home Assistant dengan status panggilan Google Meet Anda"
+  },
+  "options": {
+    "title": "Opsi Google Meet ↔ Home Assistant",
+    "updateMethod": "Metode Pembaruan",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "URL Dasar Home Assistant",
+    "hostUrlHelp": "Tanpa garis miring di akhir; contoh: http://homeassistant.local",
+    "authToken": "Token Otorisasi",
+    "entityId": "ID Entitas",
+    "webhookUrl": "URL Webhook",
+    "webhookUrlHelp": "URL webhook lengkap termasuk ID entitas; contoh: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "Tes",
+    "save": "Simpan",
+    "configurationSaved": "Konfigurasi disimpan!",
+    "required": "Diperlukan",
+    "language": "Bahasa"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "Status Konfigurasi",
+    "meetingStatus": "Status Rapat",
+    "properlyConfigured": "Dikonfigurasi dengan benar",
+    "notConfigured": "Tidak dikonfigurasi",
+    "inGoogleMeet": "Di Google Meet",
+    "notInMeeting": "Tidak dalam rapat",
+    "lastUpdated": "Terakhir diperbarui",
+    "openConfiguration": "Buka konfigurasi"
+  },
+  "test": {
+    "testing": "Menguji...",
+    "apiValid": "Konfigurasi API valid",
+    "webhookValid": "Konfigurasi webhook valid",
+    "invalidToken": "Token otorisasi tidak valid",
+    "entityNotFound": "Entitas tidak ditemukan atau URL dasar salah",
+    "unexpectedError": "Kesalahan tak terduga",
+    "webhookFailed": "Tes webhook gagal"
+  },
+  "errors": {
+    "hostRequired": "URL host Home Assistant diperlukan",
+    "hostFormat": "URL host Home Assistant harus dimulai dengan http:// atau https://",
+    "entityRequired": "ID entitas diperlukan",
+    "tokenRequired": "Token API diperlukan untuk metode API",
+    "webhookRequired": "URL webhook diperlukan untuk metode webhook",
+    "configureFirst": "Silakan konfigurasi ekstensi terlebih dahulu"
+  }
+}

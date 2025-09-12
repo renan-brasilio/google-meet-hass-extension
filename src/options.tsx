@@ -57,9 +57,11 @@
  * - Visual feedback for all validation states
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import ReactDOM from "react-dom";
 import { Config, defaultConfig, loadConfig, saveConfig, UpdateMethod } from "./config";
+import { testConnection, TestResult } from "./hass";
+import { t, setLanguage, getCurrentLanguage, getSupportedLanguages, getLanguageName, SupportedLanguage, initializeTranslations } from "./translations";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -79,8 +81,9 @@ import {
     TextField,
     ThemeProvider,
     createTheme,
+    Select,
+    MenuItem,
 } from "@mui/material";
-import { testConnection, TestResult } from "./hass";
 
 /**
  * Create a theme with proper font settings
@@ -133,6 +136,23 @@ enum TestStatus {
 }
 
 /**
+ * Loading component for the options page
+ */
+const OptionsLoading = () => (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '400px',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontSize: '16px',
+        color: '#666'
+    }}>
+        Loading options...
+    </div>
+);
+
+/**
  * Main options component for configuration
  */
 const Options = () => {
@@ -149,12 +169,17 @@ const Options = () => {
     const [showToken, setShowToken] = useState<boolean>(false);
 
     /**
-     * Populate the previous configuration on load
+     * Populate the previous configuration on load and initialize translations
      */
     useEffect(() => {
+        // Initialize translations first
+        initializeTranslations();
+
         loadConfig().then((loadedConfig) => {
             setConfig(loadedConfig);
             setOriginalConfig(loadedConfig);
+            // Set the language from config
+            setLanguage(loadedConfig.language);
         });
     }, []);
 
@@ -183,6 +208,14 @@ const Options = () => {
             setSaved(false);
         }, 1000);
         return () => clearTimeout(timeout);
+    };
+
+    /**
+     * Handles language change
+     */
+    const handleLanguageChange = (newLanguage: SupportedLanguage) => {
+        setConfig({ ...config, language: newLanguage });
+        setLanguage(newLanguage);
     };
 
     /**
@@ -236,16 +269,32 @@ const Options = () => {
             >
                 <Stack spacing={2}>
                     <Box>
+                        <FormControl fullWidth variant="standard">
+                            <FormLabel component="legend">{t('options.language')}</FormLabel>
+                            <Select
+                                value={config.language}
+                                onChange={(e) => handleLanguageChange(e.target.value as SupportedLanguage)}
+                                variant="standard"
+                            >
+                                {getSupportedLanguages().map((lang) => (
+                                    <MenuItem key={lang} value={lang}>
+                                        {getLanguageName(lang)}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Update Method</FormLabel>
+                            <FormLabel component="legend">{t('options.updateMethod')}</FormLabel>
                             <RadioGroup
                                 value={config.method}
                                 onChange={(e) =>
                                     setConfig({ ...config, method: e.target.value as UpdateMethod })
                                 }
                             >
-                                <FormControlLabel value="api" control={<Radio />} label="API" />
-                                <FormControlLabel value="webhook" control={<Radio />} label="Webhook" />
+                                <FormControlLabel value="api" control={<Radio />} label={t('options.api')} />
+                                <FormControlLabel value="webhook" control={<Radio />} label={t('options.webhook')} />
                             </RadioGroup>
                         </FormControl>
                     </Box>
@@ -254,12 +303,12 @@ const Options = () => {
                             <TextField
                                 id="host"
                                 name="host"
-                                label="Home Assistant Base URL *"
+                                label={`${t('options.hostUrl')} *`}
                                 value={config.host}
                                 onChange={(e) =>
                                     setConfig({ ...config, host: e.target.value })
                                 }
-                                helperText="No trailing slashes; ex: http://homeassistant.local"
+                                helperText={t('options.hostUrlHelp')}
                                 variant="standard"
                                 fullWidth
                                 required
@@ -271,12 +320,12 @@ const Options = () => {
                             <TextField
                                 id="webhook_url"
                                 name="webhook_url"
-                                label="Webhook URL"
+                                label={t('options.webhookUrl')}
                                 value={config.webhook_url}
                                 onChange={(e) =>
                                     setConfig({ ...config, webhook_url: e.target.value })
                                 }
-                                helperText="Full webhook URL including entity ID; ex: https://ha.example.com/api/webhook/entity_webhook"
+                                helperText={t('options.webhookUrlHelp')}
                                 variant="standard"
                                 fullWidth
                                 required
@@ -289,7 +338,7 @@ const Options = () => {
                                 id="token"
                                 name="token"
                                 type={showToken ? "text" : "password"}
-                                label="Authorization Token"
+                                label={t('options.authToken')}
                                 value={config.token}
                                 onChange={(e) =>
                                     setConfig({ ...config, token: e.target.value })
@@ -324,7 +373,7 @@ const Options = () => {
                             <TextField
                                 id="entity_id"
                                 name="entity_id"
-                                label="Entity ID"
+                                label={t('options.entityId')}
                                 value={config.entity_id}
                                 onChange={(e) =>
                                     setConfig({
@@ -349,10 +398,10 @@ const Options = () => {
                                 size="small"
                                 onClick={test}
                                 loading={testStatus === TestStatus.Testing}
-                                loadingIndicator="Loading..."
+                                loadingIndicator={t('test.testing')}
                                 variant="outlined"
                             >
-                                Test
+                                {t('options.test')}
                             </LoadingButton>
                         )}
                         <Button
@@ -367,7 +416,7 @@ const Options = () => {
                                 }
                             }}
                         >
-                            Save
+                            {t('options.save')}
                         </Button>
                     </Box>
                     <Box sx={{ minHeight: 20, position: 'relative' }}>
@@ -381,7 +430,7 @@ const Options = () => {
                                 severity="success"
                                 sx={{ width: "100%" }}
                             >
-                                Configuration saved!
+                                {t('options.configurationSaved')}
                             </Alert>
                         </Snackbar>
                         <Snackbar
@@ -410,7 +459,9 @@ const Options = () => {
 
 ReactDOM.render(
     <React.StrictMode>
-        <Options />
+        <Suspense fallback={<OptionsLoading />}>
+            <Options />
+        </Suspense>
     </React.StrictMode>,
     document.getElementById("root")
 );
