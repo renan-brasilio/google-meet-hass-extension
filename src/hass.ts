@@ -1,7 +1,47 @@
+/**
+ * Home Assistant integration utilities for the Google Meet extension
+ *
+ * GOAL:
+ * This module provides all the communication logic between the extension and Home Assistant.
+ * It handles both API-based and webhook-based integrations, with robust error handling,
+ * retry mechanisms, and fallback strategies to ensure reliable entity state updates.
+ *
+ * The module supports two integration methods:
+ * - API: Direct REST API calls using Home Assistant's service endpoints
+ * - Webhook: HTTP webhook calls for simpler integration
+ *
+ * FEATURES:
+ * - Network connectivity checking before making requests
+ * - Exponential backoff retry mechanism for failed requests
+ * - Fallback from service calls to direct state setting for API method
+ * - Connection testing for both API and webhook methods
+ * - Comprehensive error handling and logging
+ *
+ * METHODS:
+ * - setEntityState(): Main function to update HA entity state (supports both API and webhook)
+ * - testConnection(): Tests the connection to Home Assistant
+ * - checkNetworkConnectivity(): Checks if network is available
+ * - retryWithBackoff(): Implements exponential backoff retry logic
+ * - setEntityStateAPI(): Updates entity via Home Assistant REST API
+ * - setEntityStateWebhook(): Updates entity via webhook
+ * - testConnectionAPI(): Tests API connection
+ * - testConnectionWebhook(): Tests webhook connection
+ *
+ * INTERFACES:
+ * - TestResult: Result object for connection tests
+ *
+ * ERROR HANDLING:
+ * - Network connectivity failures
+ * - HTTP errors (401, 404, etc.)
+ * - Service call failures with fallback to direct state setting
+ * - Retry logic with exponential backoff
+ */
+
 import { Config } from "./config";
 
 /**
  * Check if the network is available by attempting to reach a reliable endpoint
+ * @returns Promise that resolves to true if network is available, false otherwise
  */
 async function checkNetworkConnectivity(): Promise<boolean> {
     try {
@@ -18,13 +58,17 @@ async function checkNetworkConnectivity(): Promise<boolean> {
         clearTimeout(timeoutId);
         return response.ok;
     } catch (error) {
-        console.warn("Network connectivity check failed:", error);
+        console.error("Network connectivity check failed:", error);
         return false;
     }
 }
 
 /**
  * Retry a function with exponential backoff
+ * @param fn - Function to retry
+ * @param maxRetries - Maximum number of retry attempts (default: 3)
+ * @param baseDelay - Base delay in milliseconds (default: 1000)
+ * @returns Promise that resolves to the function result
  */
 async function retryWithBackoff<T>(
     fn: () => Promise<T>,
@@ -45,7 +89,6 @@ async function retryWithBackoff<T>(
 
             // Exponential backoff: 1s, 2s, 4s
             const delay = baseDelay * Math.pow(2, attempt);
-            console.warn(`Attempt ${attempt + 1} failed, retrying in ${delay}ms:`, error);
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
@@ -53,31 +96,59 @@ async function retryWithBackoff<T>(
     throw lastError!;
 }
 
+/**
+ * Updates entity state using Home Assistant API
+ * @param config - Configuration object containing API details
+ * @param newValue - New boolean value for the entity
+ */
 async function setEntityStateAPI(config: Config, newValue: boolean) {
     try {
-        const response = await fetch(config.host + "/api/states/" + config.entity_id, {
+        // First try using service calls for boolean entities
+        const service = newValue ? "input_boolean.turn_on" : "input_boolean.turn_off";
+        const serviceUrl = `${config.host}/api/services/${service}`;
+
+        const response = await fetch(serviceUrl, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + config.token,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                state: newValue ? "on" : "off",
+                entity_id: config.entity_id,
             }),
         });
 
         if (!response.ok) {
-            console.error(`Failed to update entity state: HTTP ${response.status} ${response.statusText}`);
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+            // Fallback to direct state setting if service call fails
+            const stateUrl = `${config.host}/api/states/${config.entity_id}`;
 
-        console.log(`Successfully updated entity ${config.entity_id} to ${newValue ? "on" : "off"}`);
+            const fallbackResponse = await fetch(stateUrl, {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + config.token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    state: newValue ? "on" : "off",
+                }),
+            });
+
+            if (!fallbackResponse.ok) {
+                console.error(`Both service call and direct state setting failed: HTTP ${fallbackResponse.status} ${fallbackResponse.statusText}`);
+                throw new Error(`HTTP ${fallbackResponse.status}: ${fallbackResponse.statusText}`);
+            }
+        }
     } catch (error) {
         console.error("Error updating entity state via API:", error);
         throw error;
     }
 }
 
+/**
+ * Updates entity state using Home Assistant webhook
+ * @param config - Configuration object containing webhook URL
+ * @param newValue - New boolean value for the entity
+ */
 async function setEntityStateWebhook(config: Config, newValue: boolean) {
     try {
         const response = await fetch(config.webhook_url, {
@@ -94,14 +165,18 @@ async function setEntityStateWebhook(config: Config, newValue: boolean) {
             console.error(`Failed to update entity state via webhook: HTTP ${response.status} ${response.statusText}`);
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-
-        console.log(`Successfully updated entity via webhook to ${newValue ? "on" : "off"}`);
     } catch (error) {
         console.error("Error updating entity state via webhook:", error);
         throw error;
     }
 }
 
+/**
+ * Updates Home Assistant entity state based on configuration method
+ * @param config - Configuration object
+ * @param newValue - New boolean value for the entity
+ * @returns Promise that resolves to true if successful, false otherwise
+ */
 export async function setEntityState(config: Config, newValue: boolean) {
     try {
         // Check network connectivity first
@@ -129,11 +204,21 @@ export async function setEntityState(config: Config, newValue: boolean) {
     }
 }
 
+/**
+ * Interface for test connection results
+ */
 export interface TestResult {
+    /** Whether the test was successful */
     success: boolean;
+    /** Test result message */
     message: string;
 }
 
+/**
+ * Tests API connection to Home Assistant
+ * @param config - Configuration object containing API details
+ * @returns Promise that resolves to test result
+ */
 async function testConnectionAPI(config: Config): Promise<TestResult> {
     try {
         const { status } = await fetch(
@@ -177,6 +262,11 @@ async function testConnectionAPI(config: Config): Promise<TestResult> {
     }
 }
 
+/**
+ * Tests webhook connection to Home Assistant
+ * @param config - Configuration object containing webhook URL
+ * @returns Promise that resolves to test result
+ */
 async function testConnectionWebhook(config: Config): Promise<TestResult> {
     try {
         const response = await fetch(config.webhook_url, {
@@ -208,6 +298,11 @@ async function testConnectionWebhook(config: Config): Promise<TestResult> {
     }
 }
 
+/**
+ * Tests the connection to Home Assistant based on configuration method
+ * @param config - Configuration object
+ * @returns Promise that resolves to test result
+ */
 export async function testConnection(config: Config): Promise<TestResult> {
     if (config.method === "webhook") {
         return await testConnectionWebhook(config);

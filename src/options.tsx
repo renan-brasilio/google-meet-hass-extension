@@ -1,3 +1,62 @@
+/**
+ * Options page component for the Google Meet ↔ Home Assistant extension
+ *
+ * GOAL:
+ * This React component provides the comprehensive configuration interface for the extension.
+ * Users can set up their Home Assistant integration by choosing between API or webhook
+ * methods and providing the necessary connection details.
+ *
+ * The options page allows users to:
+ * - Select integration method (API or Webhook)
+ * - Configure Home Assistant connection details
+ * - Test their configuration before saving
+ * - Save and validate their settings
+ *
+ * CONFIGURATION METHODS:
+ * - API Method: Requires Home Assistant URL, auth token, and entity ID
+ * - Webhook Method: Requires a complete webhook URL
+ *
+ * FEATURES:
+ * - Dynamic form fields based on selected method
+ * - Real-time configuration validation
+ * - Connection testing with visual feedback
+ * - Save state management with change detection
+ * - Password field with visibility toggle for API tokens
+ * - Responsive design with Material-UI components
+ *
+ * COMPONENTS:
+ * - Options: Main component that manages the configuration interface
+ * - Theme configuration for consistent Material-UI styling
+ *
+ * METHODS:
+ * - test(): Tests the connection to Home Assistant
+ * - save(): Saves configuration to Chrome storage
+ * - hasConfigChanged(): Checks if configuration has been modified
+ * - hasUrlToTest(): Determines if there's enough info to test connection
+ * - areRequiredFieldsFilled(): Validates that all required fields are completed
+ *
+ * STATE MANAGEMENT:
+ * - config: Current configuration being edited
+ * - originalConfig: Saved configuration for change detection
+ * - saved: Boolean indicating if save was successful
+ * - testStatus: Current status of connection testing
+ * - testResult: Result of the last connection test
+ * - showToken: Boolean for API token visibility toggle
+ *
+ * UI ELEMENTS:
+ * - Method selection radio buttons (API/Webhook)
+ * - Dynamic form fields based on selected method
+ * - Test button (enabled when configuration is complete)
+ * - Save button (enabled when changes are made and fields are valid)
+ * - Success/error notifications via Snackbar components
+ *
+ * VALIDATION:
+ * - Required field validation
+ * - URL format validation for Home Assistant host
+ * - Real-time connection testing
+ * - Visual feedback for all validation states
+ */
+
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Config, defaultConfig, loadConfig, saveConfig, UpdateMethod } from "./config";
@@ -8,7 +67,6 @@ import {
     Alert,
     Box,
     Button,
-    Divider,
     FormControl,
     FormControlLabel,
     FormLabel,
@@ -24,7 +82,9 @@ import {
 } from "@mui/material";
 import { testConnection, TestResult } from "./hass";
 
-// Create a theme with proper font settings
+/**
+ * Create a theme with proper font settings
+ */
 const theme = createTheme({
     typography: {
         fontFamily: '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
@@ -63,12 +123,18 @@ const theme = createTheme({
     },
 });
 
+/**
+ * Test status enumeration for connection testing
+ */
 enum TestStatus {
     NotTested,
     Testing,
     Complete,
 }
 
+/**
+ * Main options component for configuration
+ */
 const Options = () => {
     const [config, setConfig] = useState<Config>(defaultConfig);
     const [originalConfig, setOriginalConfig] = useState<Config>(defaultConfig);
@@ -82,7 +148,9 @@ const Options = () => {
     });
     const [showToken, setShowToken] = useState<boolean>(false);
 
-    // Populate the previous configuration on load
+    /**
+     * Populate the previous configuration on load
+     */
     useEffect(() => {
         loadConfig().then((loadedConfig) => {
             setConfig(loadedConfig);
@@ -90,6 +158,9 @@ const Options = () => {
         });
     }, []);
 
+    /**
+     * Tests the connection to Home Assistant
+     */
     const test = async () => {
         setTestStatus(TestStatus.Testing);
 
@@ -99,6 +170,9 @@ const Options = () => {
         setTestStatus(TestStatus.Complete);
     };
 
+    /**
+     * Saves the configuration to Chrome storage
+     */
     const save = async () => {
         await saveConfig(config);
         setOriginalConfig(config);
@@ -111,12 +185,18 @@ const Options = () => {
         return () => clearTimeout(timeout);
     };
 
-    // Check if configuration has changed
+    /**
+     * Check if configuration has changed
+     * @returns True if configuration has changed, false otherwise
+     */
     const hasConfigChanged = () => {
         return JSON.stringify(config) !== JSON.stringify(originalConfig);
     };
 
-    // Check if there's a URL to test
+    /**
+     * Check if there's a URL to test
+     * @returns True if there's a valid URL to test, false otherwise
+     */
     const hasUrlToTest = () => {
         if (config.method === "api") {
             return config.host && config.host.trim() !== "" &&
@@ -128,7 +208,10 @@ const Options = () => {
         return false;
     };
 
-    // Check if all required fields are filled
+    /**
+     * Check if all required fields are filled
+     * @returns True if all required fields are filled, false otherwise
+     */
     const areRequiredFieldsFilled = () => {
         if (config.method === "api") {
             return config.host && config.host.trim() !== "" &&
