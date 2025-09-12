@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "Aktualisiert den Status einer Home Assistant-Entität mit dem Status Ihrer Google Meet-Anrufe"
+  },
+  "options": {
+    "title": "Google Meet ↔ Home Assistant Optionen",
+    "updateMethod": "Update-Methode",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "Home Assistant Basis-URL",
+    "hostUrlHelp": "Keine Schrägstriche am Ende; z.B.: http://homeassistant.local",
+    "authToken": "Autorisierungs-Token",
+    "entityId": "Entitäts-ID",
+    "webhookUrl": "Webhook-URL",
+    "webhookUrlHelp": "Vollständige Webhook-URL einschließlich Entitäts-ID; z.B.: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "Testen",
+    "save": "Speichern",
+    "configurationSaved": "Konfiguration gespeichert!",
+    "required": "Erforderlich",
+    "language": "Sprache"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "Konfigurationsstatus",
+    "meetingStatus": "Meeting-Status",
+    "properlyConfigured": "Korrekt konfiguriert",
+    "notConfigured": "Nicht konfiguriert",
+    "inGoogleMeet": "In Google Meet",
+    "notInMeeting": "Nicht im Meeting",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "openConfiguration": "Konfiguration öffnen"
+  },
+  "test": {
+    "testing": "Teste...",
+    "apiValid": "API-Konfiguration ist gültig",
+    "webhookValid": "Webhook-Konfiguration ist gültig",
+    "invalidToken": "Ungültiger Autorisierungs-Token",
+    "entityNotFound": "Entität nicht gefunden oder falsche Basis-URL",
+    "unexpectedError": "Unerwarteter Fehler",
+    "webhookFailed": "Webhook-Test fehlgeschlagen"
+  },
+  "errors": {
+    "hostRequired": "Home Assistant Host-URL ist erforderlich",
+    "hostFormat": "Home Assistant Host-URL muss mit http:// oder https:// beginnen",
+    "entityRequired": "Entitäts-ID ist erforderlich",
+    "tokenRequired": "API-Token ist für API-Methode erforderlich",
+    "webhookRequired": "Webhook-URL ist für Webhook-Methode erforderlich",
+    "configureFirst": "Bitte konfigurieren Sie zuerst die Erweiterung"
+  }
+}

@@ -10,6 +10,8 @@
  * - API: Direct REST API calls to Home Assistant
  * - Webhook: HTTP webhook calls to Home Assistant
  *
+ * The configuration also supports internationalization with language selection.
+ *
  * METHODS:
  * - loadConfig(): Loads configuration from Chrome storage
  * - saveConfig(): Saves configuration to Chrome storage
@@ -20,6 +22,8 @@
  * - Config: Main configuration interface
  * - defaultConfig: Default configuration values
  */
+
+import { SupportedLanguage, getBrowserLanguage, t } from "./translations";
 
 /**
  * Available update methods for Home Assistant integration
@@ -40,6 +44,8 @@ export interface Config {
     method: UpdateMethod;
     /** Webhook URL (for webhook method) */
     webhook_url: string;
+    /** Selected language for the extension UI */
+    language: SupportedLanguage;
 }
 
 /**
@@ -51,6 +57,7 @@ export const defaultConfig: Config = {
     entity_id: "input_boolean.in_meeting",
     method: "api",
     webhook_url: "",
+    language: getBrowserLanguage(),
 };
 
 /**
@@ -82,27 +89,27 @@ export function validateConfig(config: Config): { isValid: boolean; errors: stri
     if (isEmptyConfig) {
         return {
             isValid: false,
-            errors: ["Please configure the extension first"]
+            errors: [t('errors.configureFirst')]
         };
     }
 
     if (config.method === "api") {
         if (!config.host || config.host.trim() === "") {
-            errors.push("Home Assistant host URL is required");
+            errors.push(t('errors.hostRequired'));
         } else if (!config.host.startsWith("http://") && !config.host.startsWith("https://")) {
-            errors.push("Home Assistant host URL must start with http:// or https://");
+            errors.push(t('errors.hostFormat'));
         }
 
         if (!config.entity_id || config.entity_id.trim() === "") {
-            errors.push("Entity ID is required");
+            errors.push(t('errors.entityRequired'));
         }
 
         if (!config.token || config.token.trim() === "" || config.token === "xxxxxxx") {
-            errors.push("API token is required for API method");
+            errors.push(t('errors.tokenRequired'));
         }
     } else if (config.method === "webhook") {
         if (!config.webhook_url || config.webhook_url.trim() === "") {
-            errors.push("Webhook URL is required for webhook method");
+            errors.push(t('errors.webhookRequired'));
         }
     }
 

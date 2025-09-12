@@ -38,6 +38,7 @@
  */
 
 import { Config } from "./config";
+import { t } from "./translations";
 
 /**
  * Check if the network is available by attempting to reach a reliable endpoint
@@ -236,28 +237,28 @@ async function testConnectionAPI(config: Config): Promise<TestResult> {
             case 200:
                 return {
                     success: true,
-                    message: "API configuration is valid",
+                    message: t('test.apiValid'),
                 };
             case 401:
                 return {
                     success: false,
-                    message: "Invalid auth token",
+                    message: t('test.invalidToken'),
                 };
             case 404:
                 return {
                     success: false,
-                    message: "Entity not found, or incorrect base URL",
+                    message: t('test.entityNotFound'),
                 };
             default:
                 return {
                     success: false,
-                    message: "Unexpected error: HTTP " + status,
+                    message: t('test.unexpectedError') + ": HTTP " + status,
                 };
         }
     } catch (error) {
         return {
             success: false,
-            message: "Unexpected error: " + error,
+            message: t('test.unexpectedError') + ": " + error,
         };
     }
 }
@@ -282,18 +283,18 @@ async function testConnectionWebhook(config: Config): Promise<TestResult> {
         if (response.status === 200) {
             return {
                 success: true,
-                message: "Webhook configuration is valid",
+                message: t('test.webhookValid'),
             };
         } else {
             return {
                 success: false,
-                message: "Webhook test failed: HTTP " + response.status,
+                message: t('test.webhookFailed') + ": HTTP " + response.status,
             };
         }
     } catch (error) {
         return {
             success: false,
-            message: "Webhook test failed: " + error,
+            message: t('test.webhookFailed') + ": " + error,
         };
     }
 }
