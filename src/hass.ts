@@ -258,7 +258,7 @@ async function testConnectionAPI(config: Config): Promise<TestResult> {
     } catch (error) {
         return {
             success: false,
-            message: "Unexpected error: " + error,
+            message: t('test.unexpectedError') + ": " + error,
         };
     }
 }
@@ -294,7 +294,7 @@ async function testConnectionWebhook(config: Config): Promise<TestResult> {
     } catch (error) {
         return {
             success: false,
-            message: "Webhook test failed: " + error,
+            message: t('test.webhookFailed') + ": " + error,
         };
     }
 }

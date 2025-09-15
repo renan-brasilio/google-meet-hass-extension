@@ -1,4 +1,63 @@
-import React, { useEffect, useState } from "react";
+/**
+ * Options page component for the Google Meet ↔ Home Assistant extension
+ *
+ * GOAL:
+ * This React component provides the comprehensive configuration interface for the extension.
+ * Users can set up their Home Assistant integration by choosing between API or webhook
+ * methods and providing the necessary connection details.
+ *
+ * The options page allows users to:
+ * - Select integration method (API or Webhook)
+ * - Configure Home Assistant connection details
+ * - Test their configuration before saving
+ * - Save and validate their settings
+ *
+ * CONFIGURATION METHODS:
+ * - API Method: Requires Home Assistant URL, auth token, and entity ID
+ * - Webhook Method: Requires a complete webhook URL
+ *
+ * FEATURES:
+ * - Dynamic form fields based on selected method
+ * - Real-time configuration validation
+ * - Connection testing with visual feedback
+ * - Save state management with change detection
+ * - Password field with visibility toggle for API tokens
+ * - Responsive design with Material-UI components
+ *
+ * COMPONENTS:
+ * - Options: Main component that manages the configuration interface
+ * - Theme configuration for consistent Material-UI styling
+ *
+ * METHODS:
+ * - test(): Tests the connection to Home Assistant
+ * - save(): Saves configuration to Chrome storage
+ * - hasConfigChanged(): Checks if configuration has been modified
+ * - hasUrlToTest(): Determines if there's enough info to test connection
+ * - areRequiredFieldsFilled(): Validates that all required fields are completed
+ *
+ * STATE MANAGEMENT:
+ * - config: Current configuration being edited
+ * - originalConfig: Saved configuration for change detection
+ * - saved: Boolean indicating if save was successful
+ * - testStatus: Current status of connection testing
+ * - testResult: Result of the last connection test
+ * - showToken: Boolean for API token visibility toggle
+ *
+ * UI ELEMENTS:
+ * - Method selection radio buttons (API/Webhook)
+ * - Dynamic form fields based on selected method
+ * - Test button (enabled when configuration is complete)
+ * - Save button (enabled when changes are made and fields are valid)
+ * - Success/error notifications via Snackbar components
+ *
+ * VALIDATION:
+ * - Required field validation
+ * - URL format validation for Home Assistant host
+ * - Real-time connection testing
+ * - Visual feedback for all validation states
+ */
+
+import React, { useEffect, useState, Suspense } from "react";
 import ReactDOM from "react-dom";
 import { Config, defaultConfig, loadConfig, saveConfig, validateConfig, UpdateMethod } from "./config";
 import { testConnection, TestResult } from "./hass";
@@ -554,6 +613,9 @@ const Options = () => {
      * Populate the previous configuration on load
      */
     useEffect(() => {
+        // Initialize translations first
+        initializeTranslations();
+
         loadConfig().then((loadedConfig) => {
             setConfig(loadedConfig);
             setOriginalConfig(loadedConfig);
@@ -807,7 +869,9 @@ const Options = () => {
 
 ReactDOM.render(
     <React.StrictMode>
-        <Options />
+        <Suspense fallback={<OptionsLoading />}>
+            <Options />
+        </Suspense>
     </React.StrictMode>,
     document.getElementById("root")
 );

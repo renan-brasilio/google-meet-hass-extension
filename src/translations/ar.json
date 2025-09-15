@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "يحدث حالة كيان Home Assistant مع حالة مكالمات Google Meet الخاصة بك"
+  },
+  "options": {
+    "title": "خيارات Google Meet ↔ Home Assistant",
+    "updateMethod": "طريقة التحديث",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "رابط Home Assistant الأساسي",
+    "hostUrlHelp": "بدون شرطات في النهاية؛ مثال: http://homeassistant.local",
+    "authToken": "رمز التفويض",
+    "entityId": "معرف الكيان",
+    "webhookUrl": "رابط Webhook",
+    "webhookUrlHelp": "رابط webhook كامل يتضمن معرف الكيان؛ مثال: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "اختبار",
+    "save": "حفظ",
+    "configurationSaved": "تم حفظ الإعدادات!",
+    "required": "مطلوب",
+    "language": "اللغة"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "حالة الإعدادات",
+    "meetingStatus": "حالة الاجتماع",
+    "properlyConfigured": "مُعد بشكل صحيح",
+    "notConfigured": "غير مُعد",
+    "inGoogleMeet": "في Google Meet",
+    "notInMeeting": "ليس في اجتماع",
+    "lastUpdated": "آخر تحديث",
+    "openConfiguration": "فتح الإعدادات"
+  },
+  "test": {
+    "testing": "جاري الاختبار...",
+    "apiValid": "إعدادات API صحيحة",
+    "webhookValid": "إعدادات webhook صحيحة",
+    "invalidToken": "رمز التفويض غير صحيح",
+    "entityNotFound": "الكيان غير موجود أو رابط أساسي خاطئ",
+    "unexpectedError": "خطأ غير متوقع",
+    "webhookFailed": "فشل اختبار webhook"
+  },
+  "errors": {
+    "hostRequired": "رابط خادم Home Assistant مطلوب",
+    "hostFormat": "رابط خادم Home Assistant يجب أن يبدأ بـ http:// أو https://",
+    "entityRequired": "معرف الكيان مطلوب",
+    "tokenRequired": "رمز API مطلوب لطريقة API",
+    "webhookRequired": "رابط webhook مطلوب لطريقة webhook",
+    "configureFirst": "يرجى إعداد الامتداد أولاً"
+  }
+}

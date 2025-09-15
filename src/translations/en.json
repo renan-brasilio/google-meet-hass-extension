@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "Updates a Home Assistant entity state with the status of your Google Meet calls"
+  },
+  "options": {
+    "title": "Google Meet ↔ Home Assistant Options",
+    "updateMethod": "Update Method",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "Home Assistant Base URL",
+    "hostUrlHelp": "No trailing slashes; ex: http://homeassistant.local",
+    "authToken": "Authorization Token",
+    "entityId": "Entity ID",
+    "webhookUrl": "Webhook URL",
+    "webhookUrlHelp": "Full webhook URL including entity ID; ex: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "Test",
+    "save": "Save",
+    "configurationSaved": "Configuration saved!",
+    "required": "Required",
+    "language": "Language"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "Configuration Status",
+    "meetingStatus": "Meeting Status",
+    "properlyConfigured": "Properly configured",
+    "notConfigured": "Not configured",
+    "inGoogleMeet": "In Google Meet",
+    "notInMeeting": "Not in meeting",
+    "lastUpdated": "Last updated",
+    "openConfiguration": "Open configuration"
+  },
+  "test": {
+    "testing": "Testing...",
+    "apiValid": "API configuration is valid",
+    "webhookValid": "Webhook configuration is valid",
+    "invalidToken": "Invalid auth token",
+    "entityNotFound": "Entity not found, or incorrect base URL",
+    "unexpectedError": "Unexpected error",
+    "webhookFailed": "Webhook test failed"
+  },
+  "errors": {
+    "hostRequired": "Home Assistant host URL is required",
+    "hostFormat": "Home Assistant host URL must start with http:// or https://",
+    "entityRequired": "Entity ID is required",
+    "tokenRequired": "API token is required for API method",
+    "webhookRequired": "Webhook URL is required for webhook method",
+    "configureFirst": "Please configure the extension first"
+  }
+}

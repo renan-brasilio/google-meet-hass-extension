@@ -348,6 +348,9 @@ const Popup = () => {
      * Populate the previous configuration on load and start monitoring
      */
     useEffect(() => {
+        // Initialize translations first
+        initializeTranslations();
+
         loadConfig().then((loadedConfig) => {
             setConfig(loadedConfig);
         }).catch((error) => {

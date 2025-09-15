@@ -89,27 +89,27 @@ export function validateConfig(config: Config): { isValid: boolean; errors: stri
     if (isEmptyConfig) {
         return {
             isValid: false,
-            errors: ["Please configure the extension first"]
+            errors: [t('errors.configureFirst')]
         };
     }
 
     if (config.method === "api") {
         if (!config.host || config.host.trim() === "") {
-            errors.push("Home Assistant host URL is required");
+            errors.push(t('errors.hostRequired'));
         } else if (!config.host.startsWith("http://") && !config.host.startsWith("https://")) {
-            errors.push("Home Assistant host URL must start with http:// or https://");
+            errors.push(t('errors.hostFormat'));
         }
 
         if (!config.entity_id || config.entity_id.trim() === "") {
-            errors.push("Entity ID is required");
+            errors.push(t('errors.entityRequired'));
         }
 
         if (!config.token || config.token.trim() === "" || config.token === "xxxxxxx") {
-            errors.push("API token is required for API method");
+            errors.push(t('errors.tokenRequired'));
         }
     } else if (config.method === "webhook") {
         if (!config.webhook_url || config.webhook_url.trim() === "") {
-            errors.push("Webhook URL is required for webhook method");
+            errors.push(t('errors.webhookRequired'));
         }
     }
 

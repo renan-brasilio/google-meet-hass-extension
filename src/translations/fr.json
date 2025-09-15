@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "Met à jour l'état d'une entité Home Assistant avec le statut de vos appels Google Meet"
+  },
+  "options": {
+    "title": "Options Google Meet ↔ Home Assistant",
+    "updateMethod": "Méthode de Mise à Jour",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "URL de Base Home Assistant",
+    "hostUrlHelp": "Sans barres obliques à la fin ; ex: http://homeassistant.local",
+    "authToken": "Token d'Autorisation",
+    "entityId": "ID de l'Entité",
+    "webhookUrl": "URL du Webhook",
+    "webhookUrlHelp": "URL complète du webhook incluant l'ID de l'entité ; ex: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "Tester",
+    "save": "Enregistrer",
+    "configurationSaved": "Configuration enregistrée !",
+    "required": "Requis",
+    "language": "Langue"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "État de la Configuration",
+    "meetingStatus": "État de la Réunion",
+    "properlyConfigured": "Correctement configuré",
+    "notConfigured": "Non configuré",
+    "inGoogleMeet": "Dans Google Meet",
+    "notInMeeting": "Pas en réunion",
+    "lastUpdated": "Dernière mise à jour",
+    "openConfiguration": "Ouvrir la configuration"
+  },
+  "test": {
+    "testing": "Test en cours...",
+    "apiValid": "Configuration API valide",
+    "webhookValid": "Configuration webhook valide",
+    "invalidToken": "Token d'authentification invalide",
+    "entityNotFound": "Entité non trouvée ou URL de base incorrecte",
+    "unexpectedError": "Erreur inattendue",
+    "webhookFailed": "Test webhook échoué"
+  },
+  "errors": {
+    "hostRequired": "URL de l'hôte Home Assistant requise",
+    "hostFormat": "URL de l'hôte Home Assistant doit commencer par http:// ou https://",
+    "entityRequired": "ID de l'entité requis",
+    "tokenRequired": "Token API requis pour la méthode API",
+    "webhookRequired": "URL webhook requise pour la méthode webhook",
+    "configureFirst": "Veuillez configurer l'extension d'abord"
+  }
+}

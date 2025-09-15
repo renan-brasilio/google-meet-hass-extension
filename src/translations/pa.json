@@ -1,0 +1,51 @@
+{
+  "extension": {
+    "name": "Google Meet ↔ Home Assistant",
+    "description": "ਤੁਹਾਡੀਆਂ Google Meet ਕਾਲਾਂ ਦੀ ਸਥਿਤੀ ਦੇ ਨਾਲ Home Assistant ਇਕਾਈ ਦੀ ਸਥਿਤੀ ਨੂੰ ਅਪਡੇਟ ਕਰਦਾ ਹੈ"
+  },
+  "options": {
+    "title": "Google Meet ↔ Home Assistant ਵਿਕਲਪ",
+    "updateMethod": "ਅਪਡੇਟ ਵਿਧੀ",
+    "api": "API",
+    "webhook": "Webhook",
+    "hostUrl": "Home Assistant ਬੇਸ URL",
+    "hostUrlHelp": "ਅੰਤ ਵਿੱਚ ਸਲੈਸ਼ ਨਹੀਂ; ਉਦਾਹਰਣ: http://homeassistant.local",
+    "authToken": "ਪ੍ਰਮਾਣੀਕਰਨ ਟੋਕਨ",
+    "entityId": "ਇਕਾਈ ID",
+    "webhookUrl": "Webhook URL",
+    "webhookUrlHelp": "ਇਕਾਈ ID ਸਮੇਤ ਪੂਰਾ webhook URL; ਉਦਾਹਰਣ: https://ha.example.com/api/webhook/entity_webhook",
+    "test": "ਟੈਸਟ",
+    "save": "ਸੇਵ",
+    "configurationSaved": "ਕੌਂਫਿਗਰੇਸ਼ਨ ਸੇਵ ਹੋਈ!",
+    "required": "ਲੋੜੀਂਦਾ",
+    "language": "ਭਾਸ਼ਾ"
+  },
+  "popup": {
+    "title": "Google Meet ↔ HA",
+    "configurationStatus": "ਕੌਂਫਿਗਰੇਸ਼ਨ ਸਥਿਤੀ",
+    "meetingStatus": "ਮੀਟਿੰਗ ਸਥਿਤੀ",
+    "properlyConfigured": "ਠੀਕ ਤਰ੍ਹਾਂ ਕੌਂਫਿਗਰ ਕੀਤਾ ਗਿਆ",
+    "notConfigured": "ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ",
+    "inGoogleMeet": "Google Meet ਵਿੱਚ",
+    "notInMeeting": "ਮੀਟਿੰਗ ਵਿੱਚ ਨਹੀਂ",
+    "lastUpdated": "ਆਖਰੀ ਅਪਡੇਟ",
+    "openConfiguration": "ਕੌਂਫਿਗਰੇਸ਼ਨ ਖੋਲ੍ਹੋ"
+  },
+  "test": {
+    "testing": "ਟੈਸਟ ਕਰ ਰਹੇ ਹਾਂ...",
+    "apiValid": "API ਕੌਂਫਿਗਰੇਸ਼ਨ ਵੈਧ ਹੈ",
+    "webhookValid": "Webhook ਕੌਂਫਿਗਰੇਸ਼ਨ ਵੈਧ ਹੈ",
+    "invalidToken": "ਗਲਤ ਪ੍ਰਮਾਣੀਕਰਨ ਟੋਕਨ",
+    "entityNotFound": "ਇਕਾਈ ਨਹੀਂ ਮਿਲੀ ਜਾਂ ਗਲਤ ਬੇਸ URL",
+    "unexpectedError": "ਅਚਾਨਕ ਗਲਤੀ",
+    "webhookFailed": "Webhook ਟੈਸਟ ਅਸਫਲ"
+  },
+  "errors": {
+    "hostRequired": "Home Assistant ਹੋਸਟ URL ਲੋੜੀਂਦਾ ਹੈ",
+    "hostFormat": "Home Assistant ਹੋਸਟ URL http:// ਜਾਂ https:// ਨਾਲ ਸ਼ੁਰੂ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
+    "entityRequired": "ਇਕਾਈ ID ਲੋੜੀਂਦਾ ਹੈ",
+    "tokenRequired": "API ਵਿਧੀ ਲਈ API ਟੋਕਨ ਲੋੜੀਂਦਾ ਹੈ",
+    "webhookRequired": "Webhook ਵਿਧੀ ਲਈ Webhook URL ਲੋੜੀਂਦਾ ਹੈ",
+    "configureFirst": "ਕਿਰਪਾ ਕਰਕੇ ਪਹਿਲਾਂ ਐਕਸਟੈਨਸ਼ਨ ਕੌਂਫਿਗਰ ਕਰੋ"
+  }
+}
