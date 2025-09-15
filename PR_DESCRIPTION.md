@@ -177,7 +177,7 @@ This PR establishes a solid foundation for:
 - [x] Build system optimized
 - [x] Documentation updated
 - [x] Backward compatibility maintained
-- [x] Version updated to 0.3.0
+- [x] Version updated to 0.2.2
 
 ## 🔗 **Related**
 - Based on original work by [@colinodell](https://github.com/colinodell)
