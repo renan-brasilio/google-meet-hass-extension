@@ -23,7 +23,7 @@
  * - defaultConfig: Default configuration values
  */
 
-import { SupportedLanguage, getBrowserLanguage, t } from "./translations";
+// import { SupportedLanguage, getBrowserLanguage, t } from "./translations";
 
 /**
  * Available update methods for Home Assistant integration
@@ -45,7 +45,7 @@ export interface Config {
     /** Webhook URL (for webhook method) */
     webhook_url: string;
     /** Selected language for the extension UI */
-    language: SupportedLanguage;
+    language: string;
 }
 
 /**
@@ -57,7 +57,7 @@ export const defaultConfig: Config = {
     entity_id: "input_boolean.in_meeting",
     method: "api",
     webhook_url: "",
-    language: getBrowserLanguage(),
+    language: "en",
 };
 
 /**
@@ -89,27 +89,27 @@ export function validateConfig(config: Config): { isValid: boolean; errors: stri
     if (isEmptyConfig) {
         return {
             isValid: false,
-            errors: [t('errors.configureFirst')]
+            errors: ["Please configure the extension first"]
         };
     }
 
     if (config.method === "api") {
         if (!config.host || config.host.trim() === "") {
-            errors.push(t('errors.hostRequired'));
+            errors.push("Home Assistant host URL is required");
         } else if (!config.host.startsWith("http://") && !config.host.startsWith("https://")) {
-            errors.push(t('errors.hostFormat'));
+            errors.push("Home Assistant host URL must start with http:// or https://");
         }
 
         if (!config.entity_id || config.entity_id.trim() === "") {
-            errors.push(t('errors.entityRequired'));
+            errors.push("Entity ID is required");
         }
 
         if (!config.token || config.token.trim() === "" || config.token === "xxxxxxx") {
-            errors.push(t('errors.tokenRequired'));
+            errors.push("API token is required for API method");
         }
     } else if (config.method === "webhook") {
         if (!config.webhook_url || config.webhook_url.trim() === "") {
-            errors.push(t('errors.webhookRequired'));
+            errors.push("Webhook URL is required for webhook method");
         }
     }
 

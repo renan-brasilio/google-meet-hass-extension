@@ -56,27 +56,34 @@ async function updateMeetingStateIfNeeded() {
 
     // Set the action indicator immediately
     if (isInMeeting) {
-        // Show green badge when in meeting
-        chrome.action.setBadgeText({ text: "🟢" });
-        chrome.action.setBadgeBackgroundColor({ color: "white" });
+        // Show "ON" badge when in meeting
+        chrome.action.setBadgeText({ text: "ON" });
+        chrome.action.setBadgeBackgroundColor({ color: "#FF0000" }); // Red for visibility
+        console.log("Badge set to ON - in meeting");
     } else {
         // Clear badge when not in meeting
         chrome.action.setBadgeText({ text: "" });
-        chrome.action.setBadgeBackgroundColor({ color: "gray" });
+        chrome.action.setBadgeBackgroundColor({ color: "#00FF00" }); // Green for visibility
+        console.log("Badge cleared - not in meeting");
     }
 
     // Send the entity update to Home Assistant
     try {
         const config = await loadConfig();
+        console.log("Loaded config:", config);
 
         // Validate configuration before attempting to update
         const validation = validateConfig(config);
+        console.log("Config validation:", validation);
         if (!validation.isValid) {
+            console.log("Configuration is invalid, skipping HA update");
             // Don't change badge for unconfigured state - let it show meeting status
             return;
         }
 
+        console.log("Attempting to update HA entity, isInMeeting:", isInMeeting);
         const success = await setEntityState(config, isInMeeting);
+        console.log("HA update result:", success);
 
         if (success === false) {
             // Update badge to show error state

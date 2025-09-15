@@ -38,7 +38,7 @@
  */
 
 import { Config } from "./config";
-import { t } from "./translations";
+// import { t } from "./translations";
 
 /**
  * Check if the network is available by attempting to reach a reliable endpoint
@@ -233,32 +233,32 @@ async function testConnectionAPI(config: Config): Promise<TestResult> {
             }
         );
 
-        switch (status) {
-            case 200:
-                return {
-                    success: true,
-                    message: t('test.apiValid'),
-                };
-            case 401:
-                return {
-                    success: false,
-                    message: t('test.invalidToken'),
-                };
-            case 404:
-                return {
-                    success: false,
-                    message: t('test.entityNotFound'),
-                };
-            default:
-                return {
-                    success: false,
-                    message: t('test.unexpectedError') + ": HTTP " + status,
-                };
-        }
+               switch (status) {
+                   case 200:
+                       return {
+                           success: true,
+                           message: "API configuration is valid",
+                       };
+                   case 401:
+                       return {
+                           success: false,
+                           message: "Invalid auth token",
+                       };
+                   case 404:
+                       return {
+                           success: false,
+                           message: "Entity not found, or incorrect base URL",
+                       };
+                   default:
+                       return {
+                           success: false,
+                           message: "Unexpected error: HTTP " + status,
+                       };
+               }
     } catch (error) {
         return {
             success: false,
-            message: t('test.unexpectedError') + ": " + error,
+            message: "Unexpected error: " + error,
         };
     }
 }
@@ -280,21 +280,21 @@ async function testConnectionWebhook(config: Config): Promise<TestResult> {
             }),
         });
 
-        if (response.status === 200) {
-            return {
-                success: true,
-                message: t('test.webhookValid'),
-            };
-        } else {
-            return {
-                success: false,
-                message: t('test.webhookFailed') + ": HTTP " + response.status,
-            };
-        }
+               if (response.status === 200) {
+                   return {
+                       success: true,
+                       message: "Webhook configuration is valid",
+                   };
+               } else {
+                   return {
+                       success: false,
+                       message: "Webhook test failed: HTTP " + response.status,
+                   };
+               }
     } catch (error) {
         return {
             success: false,
-            message: t('test.webhookFailed') + ": " + error,
+            message: "Webhook test failed: " + error,
         };
     }
 }
