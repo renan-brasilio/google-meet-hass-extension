@@ -18,6 +18,11 @@
  * - validateConfig(): Validates configuration completeness and format
  *
  * TYPES:
+ */
+
+
+/**
+ * TYPES:
  * - UpdateMethod: Union type for "api" | "webhook"
  * - Config: Main configuration interface
  * - defaultConfig: Default configuration values
@@ -89,27 +94,27 @@ export function validateConfig(config: Config): { isValid: boolean; errors: stri
     if (isEmptyConfig) {
         return {
             isValid: false,
-            errors: [t('errors.configureFirst')]
+            errors: ['Please configure the extension first']
         };
     }
 
     if (config.method === "api") {
         if (!config.host || config.host.trim() === "") {
-            errors.push(t('errors.hostRequired'));
+            errors.push('Home Assistant URL is required');
         } else if (!config.host.startsWith("http://") && !config.host.startsWith("https://")) {
-            errors.push(t('errors.hostFormat'));
+            errors.push('Home Assistant URL must start with http:// or https://');
         }
 
         if (!config.entity_id || config.entity_id.trim() === "") {
-            errors.push(t('errors.entityRequired'));
+            errors.push('Entity ID is required');
         }
 
         if (!config.token || config.token.trim() === "" || config.token === "xxxxxxx") {
-            errors.push(t('errors.tokenRequired'));
+            errors.push('Authorization token is required');
         }
     } else if (config.method === "webhook") {
         if (!config.webhook_url || config.webhook_url.trim() === "") {
-            errors.push(t('errors.webhookRequired'));
+            errors.push('Webhook URL is required');
         }
     }
 

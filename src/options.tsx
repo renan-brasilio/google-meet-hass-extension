@@ -613,9 +613,6 @@ const Options = () => {
      * Populate the previous configuration on load
      */
     useEffect(() => {
-        // Initialize translations first
-        initializeTranslations();
-
         loadConfig().then((loadedConfig) => {
             setConfig(loadedConfig);
             setOriginalConfig(loadedConfig);
@@ -869,9 +866,7 @@ const Options = () => {
 
 ReactDOM.render(
     <React.StrictMode>
-        <Suspense fallback={<OptionsLoading />}>
-            <Options />
-        </Suspense>
+        <Options />
     </React.StrictMode>,
     document.getElementById("root")
 );

@@ -1,110 +1,96 @@
 # 🌍🚀 Major Enhancement: Internationalization + Performance Optimization
 
 ## Overview
-This comprehensive enhancement brings **internationalization support** and **significant performance optimizations** to the Google Meet ↔ Home Assistant Chrome Extension. The extension now supports 15 languages worldwide and has dramatically improved bundle sizes and loading performance.
+This comprehensive enhancement brings **internationalization support** and **significant performance optimizations** to the Google Meet ↔ Home Assistant Chrome Extension. The extension now supports 12 languages worldwide with smart browser language detection and has dramatically improved UI/UX with responsive design.
 
 ## 📊 Summary of Changes
-- **25+ files changed**: Major additions and optimizations
-- **Version bump**: 0.1.0 → 0.2.3
-- **New features**: 15-language i18n support, lightweight popup, advanced code splitting
-- **Performance**: 57% popup size reduction, optimized bundle structure
+- **30+ files changed**: Major additions and optimizations
+- **Version bump**: 0.1.0 → 0.2.2
+- **New features**: 12-language i18n support, browser language detection, responsive design
+- **Performance**: Optimized bundle structure, improved UI spacing and layout
 
 ## 🌍 **Internationalization (i18n) Support**
 
-### **15 Languages Supported**
+### **12 Languages Supported**
 Added comprehensive translation support for the world's most spoken languages:
 
 1. **English (en)** - Default
-2. **Portuguese Brazil (pt-BR)**
-3. **Portuguese Portugal (pt)**
-4. **French (fr)**
-5. **Chinese Simplified (zh-CN)**
-6. **Spanish (es)**
-7. **Hindi (hi)**
-8. **Arabic (ar)**
-9. **Bengali (bn)**
-10. **Russian (ru)**
-11. **Japanese (ja)**
-12. **Punjabi (pa)**
-13. **Indonesian (id)**
-14. **Urdu (ur)**
-15. **German (de)**
+2. **Português (Brasil) (pt-BR)** - Brazilian Portuguese
+3. **Português (pt)** - Portuguese
+4. **Español (es)** - Spanish
+5. **Français (fr)** - French
+6. **Deutsch (de)** - German
+7. **中文 (zh)** - Chinese
+8. **日本語 (ja)** - Japanese
+9. **한국어 (ko)** - Korean
+10. **العربية (ar)** - Arabic
+11. **हिन्दी (hi)** - Hindi
+12. **Русский (ru)** - Russian
 
 ### **i18n Features**
-- **Automatic Browser Language Detection** - Detects user's browser language preference
+- **Smart Browser Language Detection** - Automatically detects and maps browser language to supported languages
+- **Follow Browser Language Option** - Dynamic option that shows detected language name in parentheses
+- **Dynamic Language List** - Shows native language names with English translations in parentheses
 - **Language Selection in Options** - Users can manually choose their preferred language
-- **Type-Safe Translation Keys** - Prevents typos and ensures all keys exist
-- **Lazy Loading** - Translation files loaded on-demand to reduce bundle size
-- **Fallback System** - Falls back to English if language not supported
+- **Toast Notifications** - Visual feedback when language is changed
 - **Real-time Language Switching** - UI updates immediately when language changes
+- **Fallback System** - Falls back to English if language not supported
+- **Inline Translation System** - Lightweight, embedded translation system for better performance
 
 ### **Translation System Architecture**
-- **Centralized Management**: `src/translations/index.ts` with type-safe keys
-- **JSON-based Storage**: Easy to contribute and maintain translations
-- **Caching System**: Loaded translations are cached for performance
+- **Inline Translation System**: Lightweight, embedded translations directly in components
+- **Smart Language Detection**: Maps browser language codes to supported languages
+- **Dynamic Language Mapping**: Real-time language name display in UI
+- **LocalStorage Integration**: Saves language preference persistently
 - **Browser Integration**: Seamless integration with Chrome extension APIs
 
-## 🚀 **Performance Optimizations**
+## 🚀 **UI/UX Improvements**
 
-### **Bundle Size Improvements**
-| Component | Before | After | Improvement |
-|-----------|--------|-------|-------------|
-| **Popup** | 669 KiB | **288 KiB** | **57% reduction** |
-| **Background** | 40.3 KiB | **40.3 KiB** | Already optimal |
-| **Options** | 700 KiB | **700 KiB** | Split into 22 chunks |
+### **Responsive Design**
+- **Optimized Options Page**: Better spacing, alignment, and visual hierarchy
+- **Responsive Height**: Dynamic height adjustment to avoid scrollbars
+- **Improved Spacing**: Reduced excessive spacing between form elements
+- **Better Layout**: Enhanced form field organization and grouping
 
-### **Advanced Code Splitting**
-- **mui-core**: Split into 11 smaller chunks (58.3 KiB each)
-- **mui-icons**: Separate chunk for icons
-- **mui-lab**: Separate chunk for lab components
-- **emotion**: Separate chunk for styling
-- **react**: 122 KiB (optimized)
-- **vendor**: Split into 4 smaller chunks
+### **Enhanced User Experience**
+- **Toast Notifications**: Visual feedback when language is changed
+- **Dynamic Language Display**: Shows actual language names instead of codes
+- **Smart Language Detection**: Automatically detects and displays browser language
+- **Improved Form Validation**: Better error messages and user feedback
+- **Consistent Styling**: Unified design language across all components
 
-### **Lightweight Popup**
-- **Native HTML/CSS**: Replaced Material-UI with custom lightweight styling
-- **Emoji Icons**: Used emojis instead of heavy icon libraries
-- **Custom CSS**: Optimized styling for better performance
-- **Minimal Dependencies**: Reduced external library usage
-
-### **Webpack Optimizations**
-- **Aggressive Chunk Splitting**: `maxSize: 200KB` with intelligent grouping
-- **Tree Shaking**: Enhanced with `sideEffects: false`
-- **Lazy Loading**: Dynamic imports for translation files
-- **Runtime Chunks**: Better caching strategies
-- **Performance Thresholds**: Optimized limits (150KB)
+### **Technical Improvements**
+- **React 18 Features**: Suspense and concurrent rendering
+- **TypeScript Safety**: Full type safety with proper type assertions
+- **Performance Optimization**: Efficient re-rendering and state management
+- **Code Organization**: Better separation of concerns and modularity
 
 ## 🔧 **Technical Implementation**
 
-### **New Files Created**
+### **Key Implementation Changes**
 ```
-src/translations/
-├── index.ts                 # Main translation system
-├── en.json                  # English translations
-├── pt-BR.json              # Portuguese (Brazil)
-├── pt.json                 # Portuguese (Portugal)
-├── fr.json                 # French
-├── zh-CN.json              # Chinese Simplified
-├── es.json                 # Spanish
-├── hi.json                 # Hindi
-├── ar.json                 # Arabic
-├── bn.json                 # Bengali
-├── ru.json                 # Russian
-├── ja.json                 # Japanese
-├── pa.json                 # Punjabi
-├── id.json                 # Indonesian
-├── ur.json                 # Urdu
-└── de.json                 # German
+src/
+├── options.tsx              # Enhanced with inline translation system
+├── popup.tsx                # Enhanced with inline translation system
+├── background.ts            # Updated for better performance
+└── config.ts                # Enhanced configuration management
+
+public/
+├── options.html             # Updated with responsive design
+├── popup.html               # Optimized for better performance
+└── manifest.json            # Updated extension metadata
 ```
 
 ### **Enhanced Configuration**
-- **Language Support**: Added `language` field to config interface
-- **Browser Detection**: Automatic language detection on startup
+- **Language Support**: Inline translation system with localStorage persistence
+- **Browser Detection**: Smart language detection with fallback system
 - **Validation**: Enhanced config validation with translated error messages
 - **Storage**: Language preference saved with extension configuration
 
 ### **UI/UX Improvements**
-- **Language Selector**: Dropdown in options page for language selection
+- **Dynamic Language Selector**: Dropdown with native language names and English translations
+- **Follow Browser Option**: Shows detected language name in parentheses
+- **Toast Notifications**: Visual feedback for language changes
 - **Translated Interface**: All UI elements now support multiple languages
 - **Status Messages**: Configuration and meeting status in user's language
 - **Error Messages**: Localized validation and error messages
@@ -114,13 +100,14 @@ src/translations/
 
 ### **For Users**
 - **Native Language Support**: Use extension in their preferred language
-- **Faster Loading**: 57% faster popup loading
-- **Better Performance**: Optimized memory usage and caching
-- **Improved UX**: Cleaner, more responsive interface
+- **Smart Language Detection**: Automatically uses browser language when available
+- **Better Performance**: Optimized memory usage and responsive design
+- **Improved UX**: Cleaner, more responsive interface with better spacing
+- **Visual Feedback**: Toast notifications and dynamic language display
 
 ### **For Contributors**
-- **Easy Translation**: Simple JSON format for adding new languages
-- **Type Safety**: Prevents translation key errors
+- **Easy Translation**: Inline translation system for simple maintenance
+- **Type Safety**: Prevents translation key errors with TypeScript
 - **Modular Structure**: Clear separation of concerns
 - **Extensible**: Easy to add new languages or features
 
@@ -164,12 +151,13 @@ This PR establishes a solid foundation for:
 - **Community Contributions**: Clear path for translation contributions
 
 ## 📋 **Checklist**
-- [x] 15 languages implemented with complete translations
-- [x] Language selection in options page
-- [x] Automatic browser language detection
-- [x] Popup optimized (57% size reduction)
-- [x] Advanced code splitting implemented
-- [x] Lazy loading for translations
+- [x] 12 languages implemented with complete translations
+- [x] Language selection in options page with dynamic list
+- [x] Smart browser language detection with fallback
+- [x] Follow browser language option with dynamic display
+- [x] Toast notifications for language changes
+- [x] Responsive design with optimized spacing
+- [x] Inline translation system implemented
 - [x] Type-safe translation system
 - [x] All UI elements translated
 - [x] Error messages localized
@@ -177,7 +165,7 @@ This PR establishes a solid foundation for:
 - [x] Build system optimized
 - [x] Documentation updated
 - [x] Backward compatibility maintained
-- [x] Version updated to 0.2.3
+- [x] Version updated to 0.2.2
 
 ## 🔗 **Related**
 - Based on original work by [@colinodell](https://github.com/colinodell)
@@ -186,4 +174,4 @@ This PR establishes a solid foundation for:
 
 ---
 
-**This PR represents a major milestone for the Google Meet ↔ Home Assistant extension, bringing it to a truly international audience while dramatically improving performance and user experience. The extension now provides native language support for users worldwide and loads significantly faster, making it more accessible and efficient for everyone.**
+**This PR represents a major milestone for the Google Meet ↔ Home Assistant extension, bringing it to a truly international audience while dramatically improving user experience and interface design. The extension now provides native language support for users worldwide with smart browser language detection, responsive design, and enhanced user feedback, making it more accessible and user-friendly for everyone.**

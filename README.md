@@ -6,6 +6,8 @@ Chrome extension that relays your Google Meet status (in meeting or not) to Home
 
 It works by detecting whether you have any active meetings open in any Chrome tabs, and then toggles an Input Boolean in Home Assistant accordingly which you can use to create automations from.
 
+**🌍 Now supports 12 languages worldwide with automatic browser language detection!**
+
 See [my blog post for more details](https://www.colinodell.com/blog/202207/diy-on-air-light-automation-google-meet-chrome-extension).
 
 ## Installation
@@ -19,6 +21,30 @@ Or you can download and build it yourself:
 3. Visit [`chrome://extensions`](chrome://extensions) in your browser
 4. Enable Developer mode
 5. Click on "Load unpacked extension" and select the `dist` folder that yarn built
+
+## 🌍 Internationalization
+
+The extension now supports **12 languages** with automatic browser language detection:
+
+- **English** (en) - Default
+- **Português (Brasil)** (pt-BR) - Brazilian Portuguese
+- **Português** (pt) - Portuguese
+- **Español** (es) - Spanish
+- **Français** (fr) - French
+- **Deutsch** (de) - German
+- **中文** (zh) - Chinese
+- **日本語** (ja) - Japanese
+- **한국어** (ko) - Korean
+- **العربية** (ar) - Arabic
+- **हिन्दी** (hi) - Hindi
+- **Русский** (ru) - Russian
+
+### Language Features
+- **Automatic Detection**: Detects your browser's language preference
+- **Manual Selection**: Choose your preferred language in the options page
+- **Follow Browser**: Option to automatically use your browser's language
+- **Real-time Switching**: UI updates immediately when language changes
+- **Fallback System**: Falls back to English if your language isn't supported
 
 ## Configuration
 
@@ -75,12 +101,33 @@ With everything set up and working you can now use that input boolean to create 
 
 Personally, I've repurposed an older [Adafruit Weather Lamp](https://learn.adafruit.com/feather-weather-lamp) project I built by flashing [WLED](https://www.home-assistant.io/integrations/wled/) onto the board and configuring presets for when I'm in a meeting (spinning red colors) or not (solid green).
 
+## 🚀 Performance & Features
+
+### Recent Improvements
+- **Responsive Design**: Optimized options page with better spacing and layout
+- **Language Detection**: Smart browser language detection with fallback
+- **Toast Notifications**: Visual feedback when language is changed
+- **Dynamic Language List**: Shows native language names with English translations
+- **Improved UI**: Better spacing, alignment, and visual hierarchy
+
+### Technical Features
+- **Chrome Extension Manifest V3**: Latest extension standards
+- **React 18**: Modern React with Suspense and concurrent features
+- **TypeScript**: Full type safety throughout the codebase
+- **Webpack 5**: Advanced bundling with code splitting
+- **Material-UI**: Consistent design system (options page)
+- **Custom CSS**: Lightweight styling for popup
+
 ## FAQs
 
 **Can I just download this from the Chrome store?** Yes you can! https://chrome.google.com/webstore/detail/google-meet-%3C%3E-home-assis/gghhlbjdgdemfjmkdfoiebpobebkkccm?hl=en&authuser=0
+
+**What languages are supported?** The extension supports 12 languages including English, Portuguese (Brazil & Portugal), Spanish, French, German, Chinese, Japanese, Korean, Arabic, Hindi, and Russian. It automatically detects your browser language.
+
+**How does language detection work?** The extension automatically detects your browser's language preference and uses it if supported. You can also manually select a language or choose "Follow browser language" to always use your browser's setting.
 
 **Does this support other browsers and/or meeting providers?** No, and I don't have plans to do so, but PRs to add support are certainly welcome!
 
 **Can this detect if the microphone or camera is actually in use?** No, that's a rabbit hole I've already tried going down without much success.  I'm sure it's possible but the effort required to figure out a reliable, cross-platform way to detect that is simply not worth it.
 
-**Why did you use React for a three-field form? Isn't it overkill?** Yes, but I'm just starting to learn React and thought this would be a great way to practice :)
+**Why did you use React for a three-field form? Isn't it overkill?** The extension has grown significantly with internationalization, multiple configuration methods, and advanced features. React provides a solid foundation for the complex state management and UI updates needed.
