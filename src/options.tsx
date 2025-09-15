@@ -388,7 +388,6 @@ const optionsStyles = `
         cursor: pointer;
     }
     .form-content {
-        flex: 1;
         display: flex;
         flex-direction: column;
     }
@@ -396,7 +395,6 @@ const optionsStyles = `
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 24px;
         padding-top: 16px;
         border-top: 1px solid #e0e0e0;
         flex-shrink: 0;
@@ -649,7 +647,7 @@ const Options = () => {
                             value={currentLanguage}
                             onChange={(e) => handleLanguageChange(e.target.value)}
                         >
-                            <option value="follow-browser">{t('options.followBrowser')} ({detectBrowserLanguage()})</option>
+                            <option value="follow-browser">{t('options.followBrowser')} ({supportedLanguages[detectBrowserLanguage() as keyof typeof supportedLanguages]?.native || 'English'})</option>
                             {Object.entries(supportedLanguages).map(([code, lang]) => (
                                 <option key={code} value={code}>
                                     {lang.native} ({lang.english})

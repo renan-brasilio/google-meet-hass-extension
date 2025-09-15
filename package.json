@@ -1,6 +1,6 @@
 {
     "name": "google-meet-hass-extension",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "Chrome extension that updates a Home Assistant entity state with the status of your Google Meet calls",
     "sideEffects": false,
     "scripts": {

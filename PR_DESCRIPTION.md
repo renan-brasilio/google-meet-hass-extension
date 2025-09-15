@@ -5,7 +5,7 @@ This comprehensive enhancement brings **internationalization support** and **sig
 
 ## 📊 Summary of Changes
 - **25+ files changed**: Major additions and optimizations
-- **Version bump**: 0.1.0 → 0.2.2
+- **Version bump**: 0.1.0 → 0.2.3
 - **New features**: 15-language i18n support, lightweight popup, advanced code splitting
 - **Performance**: 57% popup size reduction, optimized bundle structure
 
@@ -177,7 +177,7 @@ This PR establishes a solid foundation for:
 - [x] Build system optimized
 - [x] Documentation updated
 - [x] Backward compatibility maintained
-- [x] Version updated to 0.2.2
+- [x] Version updated to 0.2.3
 
 ## 🔗 **Related**
 - Based on original work by [@colinodell](https://github.com/colinodell)
